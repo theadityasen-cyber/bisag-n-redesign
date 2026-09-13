@@ -1,0 +1,132 @@
+/* =============================================================================
+   Design tokens — BISAG-N
+   -----------------------------------------------------------------------------
+   A light system built from the institute's own mark. The logo is red and blue
+   on white, so the site is too: a cool survey-sheet white for the page, a warm
+   archival paper for the sections that carry evidence, and the two logo colours
+   split by job rather than used interchangeably.
+
+     blue  — interaction and current state: links, selection, progress, focus
+     red   — reference marks: section numbers, the Gujarat datum, the origin pin
+
+   Keeping them apart is what stops a two-colour brand from looking like a
+   warning banner. The logo's exact values are kept for graphics; text uses
+   darkened equivalents that clear WCAG AA on every ground below.
+   ========================================================================== */
+
+:root {
+  /* -- Brand (exact logo values; graphics and large marks only) ---------- */
+  --brand-blue: #008acc;
+  --brand-red: #ea0606;
+
+  /* -- Ground: survey white ---------------------------------------------- */
+  --ground: #f5f7fa; /* page */
+  --ground-2: #edf1f5; /* sunken */
+  --ground-3: #e3e9ef;
+  --surface: #ffffff; /* raised */
+
+  --hair: rgba(14, 38, 64, 0.1);
+  --hair-2: rgba(14, 38, 64, 0.18);
+  --hair-3: rgba(14, 38, 64, 0.32);
+
+  --fg: #0d1b2a; /* 16.2:1 on --ground */
+  --fg-2: #46566a; /* 7.0:1 */
+  --fg-3: #5f6e80; /* 4.9:1 — the floor for small mono labels */
+
+  /* -- Ground: archival paper -------------------------------------------- */
+  --paper: #f1ede5;
+  --paper-2: #e8e3d8;
+  --paper-3: #dcd6c9;
+  --paper-fg: #14181f;
+  --paper-fg-2: #4a5361;
+  --paper-fg-3: #646c78;
+  --paper-hair: rgba(20, 24, 31, 0.13);
+  --paper-hair-2: rgba(20, 24, 31, 0.24);
+
+  /* -- Signal ------------------------------------------------------------ */
+  --accent: #0070ad; /* logo blue, darkened: 5.0:1 on white-grey, 4.6:1 on paper */
+  --accent-2: #2e9bd6;
+  --accent-dim: rgba(0, 138, 204, 0.1);
+  --signal: #cf0a0a; /* logo red, darkened: 5.3:1, 4.9:1 on paper */
+  --signal-dim: rgba(234, 6, 6, 0.08);
+  --survey: #22714f; /* terrain / vegetation / "verified" */
+  --orbit: #0070ad; /* orbital + hydrology */
+
+  --shadow-1: 0 1px 2px rgba(13, 27, 42, 0.05), 0 4px 14px rgba(13, 27, 42, 0.05);
+
+  /* -- Type -------------------------------------------------------------- */
+  --font-display: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-serif: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
+
+  --fs-display: clamp(2.75rem, 7.4vw, 6.75rem);
+  --fs-h1: clamp(2.1rem, 5.2vw, 4.25rem);
+  --fs-h2: clamp(1.7rem, 3.4vw, 2.85rem);
+  --fs-h3: clamp(1.15rem, 1.7vw, 1.5rem);
+  --fs-h4: clamp(1rem, 1.25vw, 1.125rem);
+  --fs-lead: clamp(1.0625rem, 1.45vw, 1.375rem);
+  --fs-body: clamp(0.9375rem, 1vw, 1.0625rem);
+  --fs-sm: 0.875rem;
+  --fs-xs: 0.8125rem;
+  --fs-mono: 0.6875rem;
+  --fs-mono-lg: 0.8125rem;
+
+  --lh-tight: 1.02;
+  --lh-snug: 1.16;
+  --lh-body: 1.62;
+
+  --tr-display: -0.035em; /* large type needs negative tracking to hold together */
+  --tr-head: -0.02em;
+  --tr-label: 0.14em; /* mono labels are spaced like instrument panel legends */
+
+  /* -- Space ------------------------------------------------------------- */
+  --gut: clamp(1rem, 2.4vw, 2rem);
+  --pad: clamp(1.25rem, 4vw, 4rem);
+  --shell: 1560px;
+  --section-y: clamp(5rem, 11vh, 9.5rem);
+
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 4rem;
+  --s-9: 6rem;
+
+  /* -- Motion ------------------------------------------------------------ */
+  /* Two curves only. `--ease-out` for anything entering (fast arrival, long
+     settle); `--ease-io` for anything the user is steering. */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-io: cubic-bezier(0.62, 0.02, 0.2, 1);
+  --dur-1: 180ms;
+  --dur-2: 320ms;
+  --dur-3: 620ms;
+  --dur-4: 1100ms;
+
+  --z-canvas: 0;
+  --z-hud: 20;
+  --z-content: 30;
+  --z-header: 60;
+  --z-overlay: 90;
+
+  --masthead-h: 72px;
+
+  color-scheme: light;
+}
+
+/* A section painted on the paper ground re-points the semantic tokens rather
+   than overriding every rule inside it. */
+.on-paper {
+  --fg: var(--paper-fg);
+  --fg-2: var(--paper-fg-2);
+  --fg-3: var(--paper-fg-3);
+  --hair: var(--paper-hair);
+  --hair-2: var(--paper-hair-2);
+  --hair-3: rgba(20, 24, 31, 0.38);
+  --surface: #faf8f4;
+  background: var(--paper);
+  color: var(--paper-fg);
+}

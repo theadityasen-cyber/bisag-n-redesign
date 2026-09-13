@@ -1,0 +1,469 @@
+/* =============================================================================
+   Hero — spatial journey
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  /* An atlas plate rather than a night sky: bright at the centre where the
+     subject sits, falling to the cool grey of the page ground at the edges. */
+  background: radial-gradient(120% 90% at 58% 38%, #ffffff 0%, #f3f6f9 48%, #e3eaf1 100%);
+}
+
+.hero__viewport {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 620px;
+  overflow: hidden;
+}
+
+.hero__canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.hero__canvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Scrim, vignette and a one-pixel raster.
+   The scrim is not decoration: the copy sits bottom-left over a render whose
+   tone there is unpredictable — dark glazing at one scroll position, a blue
+   ocean at another — and dark type needs a guaranteed pale ground beneath it.
+   The gradient is angled so it reads as haze rather than as a panel. */
+.hero__veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(13, 27, 42, 0.012) 0px,
+      rgba(13, 27, 42, 0.012) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    linear-gradient(to top, rgba(245, 247, 250, 0.94) 0%, rgba(245, 247, 250, 0.62) 28%, transparent 58%),
+    linear-gradient(to right, rgba(245, 247, 250, 0.9) 0%, rgba(245, 247, 250, 0.42) 36%, transparent 62%),
+    linear-gradient(to bottom, rgba(245, 247, 250, 0.82) 0%, transparent 24%),
+    radial-gradient(122% 82% at 52% 44%, transparent 52%, rgba(227, 234, 241, 0.55) 100%);
+  z-index: 1;
+}
+
+.hero__frame {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: grid;
+  /* Identity at the head, stage copy taking the free height and settling to its
+     foot, then the HUD (and on a phone, the rail) below it. */
+  grid-template-rows: auto 1fr auto;
+  /* Clears the fixed masthead, which overlays this section. */
+  padding-block: calc(var(--masthead-h) + clamp(1rem, 3vh, 2.25rem)) clamp(1.25rem, 3.5vh, 2.25rem);
+  pointer-events: none;
+}
+
+.hero__frame > * {
+  pointer-events: auto;
+}
+
+/* -- Identity --------------------------------------------------------------- */
+
+.hero__identity {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 44ch;
+}
+
+.hero__wordmark {
+  font-size: inherit;
+}
+
+.hero__full {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 1.55vw, 1.4rem);
+  font-weight: 600;
+  line-height: 1.22;
+  letter-spacing: -0.012em;
+  color: var(--fg);
+  max-width: 30ch;
+}
+
+/* -- Stage copy ------------------------------------------------------------- */
+
+.stage-copy {
+  position: relative;
+  align-self: end;
+  display: grid;
+  max-width: 46rem;
+  /* Every stage occupies the same cell, so the crossfade happens in place and
+     the layout never reflows as the copy changes. */
+  grid-template-areas: 'stage';
+  margin-bottom: clamp(1rem, 6vh, 3.5rem);
+}
+
+.stage-copy__item {
+  grid-area: stage;
+  will-change: opacity, transform;
+}
+
+.stage-copy__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1.1rem;
+  margin-bottom: clamp(0.75rem, 1.6vh, 1.15rem);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+}
+
+.stage-copy__index {
+  color: var(--signal);
+}
+
+.stage-copy__kicker {
+  color: var(--fg);
+}
+
+.stage-copy__place {
+  color: var(--fg-3);
+}
+
+.stage-copy__place::before {
+  content: '';
+  display: inline-block;
+  width: 1.6rem;
+  height: 1px;
+  margin-right: 0.9rem;
+  vertical-align: middle;
+  background: var(--hair-2);
+}
+
+.stage-copy__title {
+  font-size: var(--fs-h1);
+  font-weight: 600;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tr-display);
+  max-width: 16ch;
+}
+
+.stage-copy__item--finale .stage-copy__title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  max-width: 14ch;
+}
+
+.stage-copy__body {
+  margin-top: clamp(0.85rem, 2vh, 1.35rem);
+  max-width: 52ch;
+  font-size: var(--fs-lead);
+  line-height: 1.5;
+  color: var(--fg-2);
+}
+
+/* -- Stage rail ------------------------------------------------------------- */
+
+.rail {
+  position: absolute;
+  right: var(--pad);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+}
+
+.rail__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.rail__button {
+  display: grid;
+  grid-template-columns: 2.2rem 2.6rem auto;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.42rem 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  color: var(--fg-3);
+  transition: color var(--dur-2) var(--ease-out);
+}
+
+.rail__index {
+  text-align: right;
+  opacity: 0.55;
+}
+
+.rail__tick {
+  height: 1px;
+  background: currentColor;
+  opacity: 0.35;
+  transform-origin: right;
+  transition:
+    transform var(--dur-2) var(--ease-out),
+    opacity var(--dur-2) var(--ease-out);
+}
+
+.rail__name {
+  opacity: 0;
+  transform: translateX(-6px);
+  transition:
+    opacity var(--dur-2) var(--ease-out),
+    transform var(--dur-2) var(--ease-out);
+}
+
+.rail__item[data-state='past'] .rail__button {
+  color: var(--fg-2);
+}
+
+.rail__item[data-state='current'] .rail__button {
+  color: var(--accent);
+}
+
+.rail__item[data-state='current'] .rail__tick {
+  opacity: 1;
+  transform: scaleX(1.55);
+}
+
+.rail__item[data-state='current'] .rail__name,
+.rail:hover .rail__name,
+.rail:focus-within .rail__name {
+  opacity: 1;
+  transform: none;
+}
+
+.rail__button:hover {
+  color: var(--fg);
+}
+
+/* -- HUD -------------------------------------------------------------------- */
+
+.hud {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  border-top: 1px solid var(--hair);
+  padding-top: 0.9rem;
+}
+
+.hud__track {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  overflow: hidden;
+}
+
+.hud__bar {
+  height: 100%;
+  background: var(--accent);
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+.hud__readouts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem clamp(1.5rem, 4vw, 3.5rem);
+  margin: 0;
+}
+
+.hud__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.hud__item dd {
+  margin: 0;
+  color: var(--fg);
+  font-size: var(--fs-mono-lg);
+}
+
+.hud__item--alt dd {
+  font-size: clamp(1.05rem, 1.7vw, 1.4rem);
+  line-height: 1;
+}
+
+.hud__num {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.hud__unit {
+  margin-left: 0.3em;
+  font-size: 0.62em;
+  color: var(--fg-3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* -- Static variant --------------------------------------------------------- */
+
+.hero--static {
+  min-height: auto;
+}
+
+.hero__viewport--static {
+  position: relative;
+  height: auto;
+  min-height: 88svh;
+  display: flex;
+}
+
+.hero__viewport--static .hero__frame {
+  grid-template-rows: auto 1fr;
+  min-height: 88svh;
+  padding-bottom: clamp(3rem, 8vh, 6rem);
+}
+
+.hero__static-copy {
+  align-self: end;
+  max-width: 24ch;
+}
+
+.hero__thesis {
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1.06;
+  max-width: 18ch;
+}
+
+.poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero__index {
+  padding-block: var(--section-y);
+  border-top: 1px solid var(--hair);
+}
+
+.hero__index-list {
+  margin-top: 2.5rem;
+  display: grid;
+  gap: 2.5rem;
+}
+
+.hero__index-item {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr;
+  gap: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--hair);
+  max-width: 62rem;
+}
+
+.hero__index-num {
+  color: var(--signal);
+}
+
+.hero__index-title {
+  font-size: var(--fs-h3);
+}
+
+.hero__index-place {
+  margin-top: 0.35rem;
+  color: var(--fg-3);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+}
+
+.hero__index-body {
+  margin-top: 0.85rem;
+  color: var(--fg-2);
+  max-width: 62ch;
+}
+
+/* -- Responsive ------------------------------------------------------------- */
+
+@media (max-width: 1080px) {
+  .rail__name {
+    display: none;
+  }
+
+  .rail__button {
+    grid-template-columns: 2rem 1.8rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .hero__viewport {
+    min-height: 560px;
+  }
+
+  /* The ministry attribution runs to three spaced lines on a phone, which is
+     more weight than an attribution should carry above the headline. */
+  .hero__identity .label {
+    letter-spacing: 0.08em;
+    line-height: 1.5;
+  }
+
+  .hero__full {
+    max-width: 26ch;
+  }
+
+  /* On a phone the rail becomes a horizontal ledger above the readouts: a
+     vertical rail would fight the thumb and eat width the copy needs. */
+  .rail {
+    position: static;
+    transform: none;
+    margin-bottom: 0.9rem;
+  }
+
+  .rail__list {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0.35rem;
+  }
+
+  .rail__button {
+    grid-template-columns: auto;
+    gap: 0.4rem;
+    padding: 0.3rem 0.1rem;
+  }
+
+  .rail__index {
+    text-align: center;
+  }
+
+  .rail__tick {
+    display: block;
+    width: 100%;
+    min-width: 1.6rem;
+  }
+
+  .rail__item[data-state='current'] .rail__tick {
+    transform: scaleX(1);
+  }
+
+  .stage-copy {
+    margin-bottom: 1.25rem;
+  }
+
+  .stage-copy__body {
+    font-size: var(--fs-body);
+  }
+
+  .hud__item--wide {
+    display: none;
+  }
+
+  .hero__index-item {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}
